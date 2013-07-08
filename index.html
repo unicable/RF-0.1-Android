@@ -90,7 +90,7 @@ $(document).ready(function(){
 	//Cargamos el reproductor
 	$.ajax({
 		async: true,
-		url: "http://webservices.radiocityfm.com/index.php?op=reproductor&callback=?",
+		url: "http://webservices.radiofiestafm.com.ar/index.php?op=reproductor&callback=?",
 		dataType : 'json',
 		success:function(data) {
 			$('#reproductor').html(data.respData);
@@ -103,11 +103,11 @@ $(document).ready(function(){
 	//Cargamos el programa en vivo
 	$.ajax({
 		async: true,
-		url: "http://webservices.radiocityfm.com/index.php?op=programacion&callback=?",
+		url: "http://webservices.radiofiestafm.com.ar/index.php?op=programacion&callback=?",
 		dataType : 'json',
 		success:function(data) {
 			$('#programa').html(data.respData.nombre);
-			$('#imagen').html('<img src="http://radiocityfm.com/imagenes/100x90/programacion/'+data.respData.foto+'" />');
+			$('#imagen').html('<img src="http://radiofiestafm.com.ar/imagenes/100x90/programacion/'+data.respData.foto+'" />');
 			$('#conduce').html(data.respData.conduce);
 			$('#horario').html(' de '+data.respData.desde+' a '+data.respData.hasta);
 	  	},
@@ -118,7 +118,7 @@ $(document).ready(function(){
 	//Cargamos feed de Facebook
 	$.ajax({
 		async: true,
-		url: "http://webservices.radiocityfm.com/face.php?callback=?",
+		url: "http://webservices.radiofiestafm.com.ar/face.php?callback=?",
 		dataType : 'json',
 		success:function(data) {
 			var contenido = '<div class="titulo">Lo que pasa en Facebook...</div>';
@@ -143,7 +143,7 @@ $(document).ready(function(){
 	//Cargamos feed de Twitter
 	$.ajax({
 		async: true,
-		url: "http://webservices.radiocityfm.com/tuit.php?callback=?",
+		url: "http://webservices.radiofiestafm.com.ar/tuit.php?callback=?",
 		dataType : 'json',
 		success:function(data) {
 			var contenido = '<div class="titulo">Lo que pasa en twitter...</div>';
@@ -182,7 +182,7 @@ $(document).ready(function(){
 			return false;			
 		}
 				
-		var url = "http://webservices.radiocityfm.com/enviar-pedido.php";
+		var url = "http://webservices.radiofiestafm.com.ar/enviar-pedido.php";
 		$.ajax({
 		   type: "POST",
 		   url: url,
