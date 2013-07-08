@@ -18,7 +18,7 @@ function IsEmail(email) {
 	var regex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 	if(!regex.test(email)) {
 		return false;
-	} else{
+	} else {
 		return true;
 	}
 }
@@ -96,28 +96,34 @@ $(document).ready(function(){
 			$('#reproductor').html(data.respData);
 	  	},
 	  	error:function(a,b,c) {			
-		  	alert('Se ha producido un error al obtener la información actualizada. Intentelo nuevamente en unos instantes.');
+		  	$('#reproductor').html('Se ha producido un error al obtener la información actualizada. Intentelo nuevamente en unos instantes.');			
 	  	},
 	});
 	
 	//Cargamos el programa en vivo
 	$.ajax({
 		async: true,
+		beforeSend: function() { $('#cargandoenvivo').show(); }, 
+     	complete: function() { $('#cargandoenvivo').hide(); $('#envivo').show(); },
 		url: "http://webservices.radiofiestafm.com.ar/index.php?op=programacion&callback=?",
 		dataType : 'json',
 		success:function(data) {
 			$('#programa').html(data.respData.nombre);
-			$('#imagen').html('<img src="http://radiofiestafm.com.ar/imagenes/100x90/programacion/'+data.respData.foto+'" />');
+			if (data.respData.foto != '' && data.respData.foto != null)
+				$('#imagen').html('<img src="http://radiofiestafm.com.ar/imagenes/100x90/programacion/'+data.respData.foto+'" />');
 			$('#conduce').html(data.respData.conduce);
 			$('#horario').html(' de '+data.respData.desde+' a '+data.respData.hasta);
 	  	},
-	  	error:function(a,b,c) {			
-		  	alert('Se ha producido un error al obtener la información actualizada. Intentelo nuevamente en unos instantes.');
+	  	error:function(a,b,c) {					  	
+			$('#envivo').html('Se ha producido un error al obtener la información actualizada. Intentelo nuevamente en unos instantes.');
+			$('#envivo').show();
 	  	},
 	});
 	//Cargamos feed de Facebook
 	$.ajax({
 		async: true,
+		beforeSend: function() { $('#cargandofacebook').show(); }, 
+     	complete: function() { $('#cargandofacebook').hide(); $('#facebookfeed').show(); },
 		url: "http://webservices.radiofiestafm.com.ar/face.php?callback=?",
 		dataType : 'json',
 		success:function(data) {
@@ -132,52 +138,61 @@ $(document).ready(function(){
 					contenido += value.mensaje+'</div></div>';
 				}
 		  	});	
-			var twitter = "'http://www.facebook.com/radiocityfmjujuy'";
-			contenido += '<div class="ver_mas_fb" onclick="loadURL('+twitter+');">Ver más</div>';
+			var facebook = "'http://www.facebook.com/radiofiesta'";
+			contenido += '<div class="ver_mas_fb" onclick="loadURL('+facebook+');">Ver más</div>';
 			$('#facebookfeed').html(contenido);	  
 	  	},
-	  	error:function(a,b,c) {			
-		  	alert('Se ha producido un error al obtener la información actualizada. Intentelo nuevamente en unos instantes.');
+	  	error:function(a,b,c) {		  	
+			$('#facebookfeed').html('Se ha producido un error al obtener la información actualizada. Intentelo nuevamente en unos instantes.');
+			$('#facebookfeed').show();
 	  	},
 	});
+	
 	//Cargamos feed de Twitter
 	$.ajax({
 		async: true,
+		beforeSend: function() { $('#cargandotwitter').show(); }, 
+     	complete: function() { $('#cargandotwitter').hide(); $('#twitterfeed').show(); },
 		url: "http://webservices.radiofiestafm.com.ar/tuit.php?callback=?",
 		dataType : 'json',
 		success:function(data) {
 			var contenido = '<div class="titulo">Lo que pasa en twitter...</div>';
 		  	$.each(data,function(index,value) {
-				var urltuit = "'https://twitter.com/radiocityjujuy/status/"+value.id+"'";		
+				var urltuit = "'https://twitter.com/radiofiesta917/status/"+value.id+"'";		
 				contenido += '<div class="item" onclick="loadURL('+urltuit+');"><div class="mensaje">'+value.text+'</div></div>';
 		  	});	
-			var twitter = "'https://twitter.com/radiocityjujuy'";
+			var twitter = "'https://twitter.com/radiofiesta917'";
 			contenido += '<div class="ver_mas_tw" onclick="loadURL('+twitter+');">Ver más</div>';
 			$('#twitterfeed').html(contenido);	  
 	  	},
 	  	error:function(a,b,c) {			
-		  	alert('Se ha producido un error al obtener la información actualizada. Intentelo nuevamente en unos instantes.');
+		  	$('#twitterfeed').html('Se ha producido un error al obtener la información actualizada. Intentelo nuevamente en unos instantes.');
+			$('#twitterfeed').show();
 	  	},
 	});
 	
 	//Enviamos mensaje
 	$("#boton_enviar").click(function() {		
 		if ($("#nombre").val().length < 1) {
+			$("#label_nombre").css("color","#C00");
 			$("#label_nombre").html('Escribe un nombre.');
 			return false;			
 		}
 		if ($("#email").val().length < 1) {
+			$("#label_email").css("color","#C00");
 			$("#label_email").html('Escribe un email.');
 			return false;
 		}
 		else {
 			if (IsEmail($("#email").val()) == false) 
 			{
+				$("#label_email").css("color","#C00");
 				$("#label_email").html('Escribe un email válido.');
 				return false;				
 			}
 		}
 		if ($("#texto").val().length < 1) {
+			$("#label_texto").css("color","#C00");
 			$("#label_texto").html('Escribe un mensaje.');
 			return false;			
 		}
@@ -209,6 +224,7 @@ $(document).ready(function(){
 </script>
 </head>
 <body>
+<div class="loading">Cargando</div>
 <div class="sidebar">	
   	<div class="s-content">
           <ul id="nav">
@@ -222,7 +238,8 @@ $(document).ready(function(){
             <!-- Main menu with font awesome icon -->
             <li id="linkenvivo"><a href="#"><i class="icon-play"></i> EN VIVO<span class="pull-right"><i class="icon-chevron-right"></i></span></a></li>
             <li id="lienvivo" class="oculto">
-           		<div id="envivo">
+            	<div id="cargandoenvivo" class="oculto cargando">Cargando contenido, espere por favor...</div>
+           		<div id="envivo" class="oculto">
                 	<div id="reproductor"></div><br />
                     <div id="activar_play"><img src="img/reproducir.png" /></div>
                     <div id="activar_pausa" class="oculto"><img src="img/pausar.png" /></div>
@@ -237,6 +254,7 @@ $(document).ready(function(){
             <div class="clear"></div>
 			<li id="linkfacebook"><a href="#"><i class="icon-facebook-sign"></i> FACEBOOK <span class="pull-right"><i class="icon-chevron-right"></i></span></a></li>
             <li id="lifacebook" class="oculto">
+            	<div id="cargandofacebook" class="oculto cargando">Cargando contenido, espere por favor...</div>
             	<div id="facebook">
                 	<div id="facebookfeed"></div>
                 </div>
@@ -244,7 +262,8 @@ $(document).ready(function(){
             <div class="clear"></div>                     
             <li id="linktwitter"><a href="#"><i class="icon-twitter-sign"></i> TWITTER <span class="pull-right"><i class="icon-chevron-right"></i></span></a></li>
             <li id="litwitter" class="oculto">
-            	<div id="twitter">
+            	<div id="cargandotwitter" class="oculto cargando">Cargando contenido, espere por favor...</div>
+            	<div id="twitter">                	
                 	<div id="twitterfeed"></div>
                 </div>
             </li>
