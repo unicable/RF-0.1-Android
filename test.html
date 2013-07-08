@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Documento sin título</title>
+<script src="js/jquery-1.8.3.min.js" type="text/javascript"></script>
+<script>
+$(document).ready(function(){ 
+	$.ajax({
+		async: true,
+		url: "http://webservices.radiocityfm.com/json.php?callback=?",
+		dataType : 'json',
+		success:function(data) {
+			var contenido = '';
+		  	$.each(data.datos,function(index,value) {
+				console.log(value.id);
+				if (value.link != '' && value.link != null)
+				{
+					contenido += '<div class="item"><a href="'+value.link+'"><div class="mensaje">';					
+					if (value.imagen != '' && value.imagen != null)
+						contenido += '<div class="imagen"><img src="'+value.imagen+'" width="130px" /></div>';
+					contenido += value.mensaje+'</div></a></div>';
+				}
+		  	});	
+			$('#facebookfeed').html(contenido);	  
+	  	},
+	  	error:function(a,b,c) {
+			alert(b);
+		  	alert('Se ha producido un error al obtener la información actualizada. Intentelo nuevamente en unos instantes.');
+	  	},
+	});
+});
+</script>
+<style>
+#facebookfeed {
+	padding:5px 0;
+	width:100%;
+	font-size:12px;
+}
+#facebookfeed a {
+	text-decoration:none;
+	color:#333;
+}
+#facebookfeed .imagen {
+	width:130px;
+	height:100px;
+	overflow:hidden;
+	margin-right:3px;
+	float:left;
+}
+#facebookfeed .mensaje {
+	padding:5px;
+	float:left;
+}
+#facebookfeed .item {
+	margin:5px 0;
+	border: 1px solid #E9E9E9;
+	background:#F5F5F5;
+	padding:5px;
+	width:100%;
+	float:left;
+}
+</style>
+</head>
+
+<body><div id="facebookfeed"></div>
+</body>
+</html>
