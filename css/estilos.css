@@ -14,6 +14,19 @@ body{
 	background:#333 url("../img/b-sidebar-back.png") repeat;
 	color: #fff;	
 }
+.cargando {
+	padding-bottom:40px;
+	padding-top:96px;
+	line-height:30px;
+	text-align:center;
+	z-index:9999;
+	width:100%;
+	height:100%;
+	float:left;
+	color:#313131;
+	font-size:12px;
+	background:url(../img/general-loader.gif) center 60px no-repeat #FFF;
+}
 #logo {
 	width:100%;
 	height:200px;
