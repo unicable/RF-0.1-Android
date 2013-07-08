@@ -110,7 +110,8 @@ $(document).ready(function(){
 		success:function(data) {
 			$('#programa').html(data.respData.nombre);
 			if (data.respData.foto != '' && data.respData.foto != null)
-				$('#imagen').html('<img src="http://www.radiofiestafm.com.ar/imagenes/100x90/programacion/'+data.respData.foto+'" />');
+				//$('#imagen').html('<img src="http://www.radiofiestafm.com.ar/imagenes/100x90/programacion/'+data.respData.foto+'" />');
+				$('#imagen').html('http://www.radiofiestafm.com.ar/imagenes/100x90/programacion/'+data.respData.foto);
 			$('#conduce').html(data.respData.conduce);
 			$('#horario').html(' de '+data.respData.desde+' a '+data.respData.hasta);
 	  	},
